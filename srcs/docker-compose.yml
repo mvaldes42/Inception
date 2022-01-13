@@ -5,12 +5,14 @@ services:
   mariadb:
     image: mariadb
     environment:
-     - MYSQL_ROOT_PASSWORD=password
-     - MYSQL_DATABASE=wordpress
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
     volumes:
      - db_data:/var/lib/mysql
-    # networks:
-    #   - my_network
+    ports: 
+      - "3306:3306"
     restart: always
 
   wordpress:
@@ -19,13 +21,14 @@ services:
       - mariadb
     links:
       - mariadb:mysql # to change later in nginx config ?
-    # networks:
-    #   - my_network
     environment:
       - WORDPRESS_DB_PASSWORD=password
       - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_HOST=mariadb
+      - WORDPRESS_DB_NAME=wordpress
+
     ports:
-      - "8000:80" # cannot change this ??
+      - "9000:80" # cannot change this ??
     volumes:
       - wordpress_data:/var/www/html
     restart: always
