@@ -1,3 +1,0 @@
-//test comment
-//dos
-//tres
