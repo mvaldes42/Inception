@@ -44,6 +44,7 @@ services:
     #   - mariadb:mysql # to change later in nginx config ?
     ports:
       - "443:443"
+      - "80:80"
     volumes:
       - wordpress_data:/var/www/html
     restart: always

@@ -23,7 +23,7 @@ RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/
 
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
-EXPOSE 443
+EXPOSE 443 80
 CMD ["/usr/sbin/nginx"]
 
 # -------------------------END----------------------------------------#
