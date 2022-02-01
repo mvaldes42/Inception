@@ -1,3 +1,6 @@
 curl localhost
 sudo systemctl stop nginx
 sudo systemctl disable nginx
+sudo service nginx stop; sudo service mysql stop
+mysqladmin -u root -p ping
+docker exec -it srcs_mariadb_1 /bin/bash

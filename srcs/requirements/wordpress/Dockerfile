@@ -1,7 +1,5 @@
 FROM debian:buster 
 
-MAINTAINER lusehair <lusehair@42.student.fr>
-
 RUN apt-get update
 RUN apt-get install -y php7.3-fpm \
     php7.3-common \

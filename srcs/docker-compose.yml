@@ -2,46 +2,48 @@ version: '3'
 
 services:
 
-  # mariadb:
-  #   image: mariadb
-  #   # build: requirements/mariadb
-  #   env_file: .env
-  #   volumes:
-  #    - db_data:/var/lib/mysql
-  #   ports: 
-  #     - "3306:3306"
-  #   restart: always
-    # networks:
-    #   my_network:
+  mariadb:
+    # image: mariadb
+    build: requirements/mariadb
+    env_file: .env
+    volumes:
+     - db_data:/var/lib/mysql
+    ports: 
+      - "3306:3306"
+    restart: always
+    networks:
+      my_network:
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD
+    #   - MYSQL_DATABASE
+    #   - MYSQL_USER
+    #   - MYSQL_PASSWORD
 
   # wordpress:
-  #   image: wordpress
-    # build: requirements/wordpress
-    # depends_on:
-    #   - mariadb
-    # links:
-    #   - mariadb:mysql # to change later in nginx config ?
-    # env_file: .env
-    # environment:
-    #   - WORDPRESS_DB_PASSWORD=$MYSQL_ROOT_PASSWORD
-    #   - WORDPRESS_DB_USER=root
-    #   - WORDPRESS_DB_HOST=mariadb
-    #   - WORDPRESS_DB_NAME=wordpress
-    # ports:
-    #   - "80:80" # cannot change this ??
-    # volumes:
-    #   - wordpress_data:/var/www/html
-    # restart: always
-    # networks:
-    #   my_network:
+  #   # image: wordpress
+  #   build: requirements/wordpress
+  #   depends_on:
+  #     - mariadb
+  #   # links:
+  #   #   - mariadb:mysql # to change later in nginx config ?
+  #   env_file: .env
+  #   environment:
+  #     - WORDPRESS_DB_PASSWORD=password
+  #     - WORDPRESS_DB_USER=root
+  #     - WORDPRESS_DB_HOST=mariadb
+  #     - WORDPRESS_DB_NAME=wordpress
+  #   ports:
+  #     - "9000:9000" # cannot change this ??
+  #   volumes:
+  #     - wordpress_data:/var/www/html
+  #   restart: always
+  #   networks:
+  #     my_network:
 
   nginx:
-    # image: nginx
     build: requirements/nginx
     # depends_on:
     #   - wordpress
-    # links:
-    #   - mariadb:mysql # to change later in nginx config ?
     ports:
       - "443:443"
       - "80:80"
@@ -55,7 +57,7 @@ services:
     env_file: .env
 
 volumes:
-#   db_data:
+  db_data:
   wordpress_data:
 
 networks:

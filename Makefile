@@ -2,12 +2,16 @@
 
 COMPOSE_FILE= srcs/docker-compose.yml
 
-.PHONY: all hosts build up start down destroy stop restart ps
+.PHONY: all services-stop hosts build up start down destroy stop restart ps
 
 .SILENT: hosts
 
 all: hosts build up
 
+services-stop:
+		sudo systemctl stop nginx
+		sudo systemctl disable nginx
+		sudo service nginx stop; sudo service mysql stop
 hosts:
 		if grep -R "mvaldes.42.fr" /etc/hosts > /dev/null; then \
 			echo 'mvaldes.42.fr already in hosts'; \
@@ -22,7 +26,7 @@ hosts:
 build: hosts
 		docker-compose -f ${COMPOSE_FILE} build $(c)
 up:
-		docker-compose -f ${COMPOSE_FILE} up -d $(c)
+		docker-compose -f ${COMPOSE_FILE} up -d --no-recreate --remove-orphans $(c)
 start:
 		docker-compose -f ${COMPOSE_FILE} start $(c)
 down:
@@ -31,8 +35,6 @@ destroy:
 		docker-compose -f ${COMPOSE_FILE} down -v $(c)
 stop:
 		docker-compose -f ${COMPOSE_FILE} stop $(c)
-restart:
-		docker-compose -f ${COMPOSE_FILE} stop $(c)
-		docker-compose -f ${COMPOSE_FILE} up -d $(c)
+restart: stop up
 ps:
 		docker-compose -f ${COMPOSE_FILE} ps
