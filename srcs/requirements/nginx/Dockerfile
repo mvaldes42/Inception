@@ -11,7 +11,7 @@ RUN mkdir /var/www/mvaldes.42.fr && \
 chown -R www-data /var/www/* && \
 chmod -R 755 /var/www/*
 
-COPY index.html /var/www/mvaldes.42.fr
+# COPY index.html /var/www/mvaldes.42.fr
 COPY nginx.conf /etc/nginx/sites-available/mvaldes.42.fr
 RUN ln -s /etc/nginx/sites-available/mvaldes.42.fr /etc/nginx/sites-enabled && \
 rm /etc/nginx/sites-enabled/default

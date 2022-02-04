@@ -1,39 +1,15 @@
-FROM debian:buster 
+FROM debian:buster
 
 RUN apt-get update
-RUN apt-get install -y php7.3-fpm \
-    php7.3-common \
-    php7.3-mysql \
-    php7.3-gmp \
-    php7.3-curl \ 
-    php7.3-intl \
-    php7.3-mbstring \
-	php7.3-xmlrpc \
-    php7.3-gd \
-    php7.3-xml \
-    php7.3-cli \
-    php7.3-zip \
-    php7.3-soap \
-    php7.3-imap \
-    php7.3-fpm \
-    wget \
-    curl \
-    openssl \
-    sendmail \ 
-    mariadb-client \
-    vim \
-    procps;  
-RUN	wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN	chmod +x wp-cli.phar
-RUN	mv wp-cli.phar /usr/local/bin/wp 
-RUN echo "listen = 9000" >> /etc/php/7.3/fpm/pool.d/www.conf
-RUN echo "access.log = /var/log/$pool.access.log" >> /etc/php/7.3/fpm/pool.d/www.conf
-RUN mkdir -p /var/www/wordpress 
-RUN chown -R  www-data:www-data /var/www/wordpress/
-RUN chmod 777 /var/www/wordpress/
-RUN mkdir -p /run/php/
-COPY tools/setup.sh /
-RUN chmod 777 /setup.sh
-WORKDIR /var/www/wordpress
-EXPOSE 9000
-ENTRYPOINT ["sh", "/setup.sh"]
+
+RUN apt-get -y install php7.3 php-mysqli php-fpm mariadb-client
+COPY ./www.conf /etc/php/7.3/fpm/pool.d
+
+ADD https://wordpress.org/wordpress-5.7.2.tar.gz /var/www/
+RUN cd /var/www && tar -xzvf wordpress-5.7.2.tar.gz
+RUN rm -f /var/www/wordpress-5.7.2.tar.gz
+RUN rm -f /var/www/wordpress/wp-config-sample.php
+COPY ./wp-config.php ./var/www/wordpress/
+
+RUN mkdir ./run/php/
+CMD ./usr/sbin/php-fpm7.3 -F

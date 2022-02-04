@@ -13,42 +13,35 @@ services:
     restart: always
     networks:
       my_network:
-    # environment:
-    #   - MYSQL_ROOT_PASSWORD
-    #   - MYSQL_DATABASE
-    #   - MYSQL_USER
-    #   - MYSQL_PASSWORD
 
-  # wordpress:
-  #   # image: wordpress
-  #   build: requirements/wordpress
-  #   depends_on:
-  #     - mariadb
-  #   # links:
-  #   #   - mariadb:mysql # to change later in nginx config ?
-  #   env_file: .env
-  #   environment:
-  #     - WORDPRESS_DB_PASSWORD=password
-  #     - WORDPRESS_DB_USER=root
-  #     - WORDPRESS_DB_HOST=mariadb
-  #     - WORDPRESS_DB_NAME=wordpress
-  #   ports:
-  #     - "9000:9000" # cannot change this ??
-  #   volumes:
-  #     - wordpress_data:/var/www/html
-  #   restart: always
-  #   networks:
-  #     my_network:
+  wordpress:
+    # image: wordpress
+    build: requirements/wordpress
+    depends_on:
+      - mariadb
+    env_file: .env
+    # environment:
+    #   - WORDPRESS_DB_PASSWORD=password
+    #   - WORDPRESS_DB_USER=root
+    #   - WORDPRESS_DB_HOST=mariadb
+    #   - WORDPRESS_DB_NAME=wordpress
+    ports:
+      - "9000:9000" # cannot change this ??
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    restart: always
+    networks:
+      my_network:
 
   nginx:
     build: requirements/nginx
-    # depends_on:
-    #   - wordpress
+    depends_on:
+      - wordpress
     ports:
       - "443:443"
       - "80:80"
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/var/www/wordpress
     restart: always
     networks:
       my_network:
