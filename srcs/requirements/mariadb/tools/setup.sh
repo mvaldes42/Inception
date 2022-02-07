@@ -9,5 +9,7 @@ if [ ! -d "/var/lib/mysql/wordpress" ]; then
 	mysql -e "CREATE DATABASE IF NOT EXISTS wordpress;"
 	mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 	mysql -e "FLUSH PRIVILEGES;"
+    service mysql stop 
 fi
+# sleep 5
 mysqld
