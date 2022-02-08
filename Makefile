@@ -24,7 +24,7 @@ hosts:
 build: hosts
 		docker-compose -f ${COMPOSE_FILE} build $(c)
 up:
-		docker-compose -f ${COMPOSE_FILE} up -d --no-recreate --remove-orphans $(c)
+		docker-compose -f ${COMPOSE_FILE} up -d --remove-orphans $(c)
 start:
 		docker-compose -f ${COMPOSE_FILE} start $(c)
 down:
@@ -33,9 +33,11 @@ destroy:
 		docker-compose -f ${COMPOSE_FILE} down -v $(c)
 stop:
 		docker-compose -f ${COMPOSE_FILE} stop $(c)
-restart: stop up
+restart: stop start
 ps:
 		docker-compose -f ${COMPOSE_FILE} ps
+logs:
+		docker logs -t $(c)
 clean:
 		sudo docker-compose -f srcs/docker-compose.yml down
 		sudo docker rmi -f $$(sudo docker images -qa)
@@ -44,3 +46,7 @@ clean:
 		sudo docker volume rm $$(sudo docker volume ls -q)
 		sudo docker system prune -a --volumes
 		sudo docker system prune -a --force
+		# docker stop $$(docker ps -qa); docker rm $$(docker ps -qa)
+		# docker rmi -f $$(docker images -qa)
+		# docker volume rm $$(docker volume ls -q)
+		# docker network rm $$(docker network ls -q) 2>/dev/null

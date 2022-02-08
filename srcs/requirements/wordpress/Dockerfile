@@ -10,7 +10,7 @@ RUN cd /var/www && tar -xzvf wordpress-5.7.2.tar.gz && \
     rm -f /var/www/wordpress-5.7.2.tar.gz && \
     rm -f /var/www/wordpress/wp-config-sample.php
 
-COPY ./wp-config.php ./var/www/wordpress/
+# COPY ./wp-config.php ./var/www/wordpress/
 
 ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /var/www
 RUN cd /var/www && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
