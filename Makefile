@@ -24,7 +24,7 @@ hosts:
 build: hosts
 		docker-compose -f ${COMPOSE_FILE} build $(c)
 up:
-		docker-compose -f ${COMPOSE_FILE} up -d --remove-orphans $(c)
+		docker-compose -f ${COMPOSE_FILE} up -d $(c)
 start:
 		docker-compose -f ${COMPOSE_FILE} start $(c)
 down:

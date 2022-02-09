@@ -6,17 +6,17 @@ services:
     build: requirements/mariadb
     env_file: .env
     volumes:
-     - dbdata:/var/lib/mysql
+     - db_data:/var/lib/mysql
     ports: 
       - "3306:3306"
-    restart: always
+    restart: "no"
     # healthcheck:
     #   test: "mysql -uwordpress -pwordpress -e 'SELECT 1;'"
     #   interval: 10s
     #   timeout: 10s
     #   retries: 15
     networks:
-      mynetwork:
+      my_network:
 
   wordpress:
     build: requirements/wordpress
@@ -27,10 +27,10 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - wordpressdata:/var/www/wordpress
+      - wordpress_data:/var/www/wordpress
     restart: always
     networks:
-      mynetwork:
+      my_network:
 
   nginx:
     build: requirements/nginx
@@ -40,26 +40,26 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - wordpressdata:/var/www/wordpress
+      - wordpress_data:/var/www/wordpress
     restart: always
     networks:
-      mynetwork:
+      my_network:
     env_file: .env
 
 volumes:
-  dbdata:
-    name: dbdata
+  db_data:
+    name: db_data
     driver: local
     driver_opts:
-      device: /home/mvaldes/data/dbdata
+      device: /home/mvaldes/data/db_data
       o: bind
       type: none
-  wordpressdata:
-    name: wordpressdata
+  wordpress_data:
+    name: wordpress_data
     driver: local
     driver_opts:
-      device: /home/mvaldes/data/wordpressdata
+      device: /home/mvaldes/data/wordpress_data
       o: bind
       type: none
 networks:
-  mynetwork:
+  my_network:
