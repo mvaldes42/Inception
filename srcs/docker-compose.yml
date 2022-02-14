@@ -3,22 +3,21 @@ version: '2.1'
 services:
 
   mariadb:
+    container_name: mariadb_container
+    image: mariadb
     build: requirements/mariadb
     env_file: .env
     volumes:
      - db_data:/var/lib/mysql
     ports: 
       - "3306:3306"
-    restart: "no"
-    # healthcheck:
-    #   test: "mysql -uwordpress -pwordpress -e 'SELECT 1;'"
-    #   interval: 10s
-    #   timeout: 10s
-    #   retries: 15
+    restart: always
     networks:
       my_network:
 
   wordpress:
+    container_name: wordpress_container
+    image: wordpress
     build: requirements/wordpress
     depends_on:
       - mariadb
@@ -33,12 +32,13 @@ services:
       my_network:
 
   nginx:
+    container_name: nginx_container
+    image: nginx
     build: requirements/nginx
     depends_on:
       - wordpress
     ports:
       - "443:443"
-      - "80:80"
     volumes:
       - wordpress_data:/var/www/wordpress
     restart: always

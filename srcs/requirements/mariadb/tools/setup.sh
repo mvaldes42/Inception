@@ -1,18 +1,17 @@
 service mysql start
-sleep 2
+echo 'testing if database exists'
 if mysql -hmariadb -u$MYSQL_USER -p$MYSQL_PASSWORD -e "use ${MYSQL_DATABASE_NAME}";
 then
     echo "Database $MYSQL_DATABASE_NAME already exists. Proceed to next step."
 else
     echo "Installing db ..."
     mysql_install_db > /dev/null 2>&1
-    # service mysql start
-    mysql -e "CREATE USER '${MYSQL_USER}'@'localhost' identified by '${MYSQL_PASSWORD}';"
-	mysql -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE_NAME};"
-	mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
-	mysql -e "FLUSH PRIVILEGES;"
+    mysql -e "CREATE USER '${MYSQL_USER}'@'%' identified by '${MYSQL_PASSWORD}';\
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE_NAME};\
+    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE_NAME}.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';\
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '12345'; FLUSH PRIVILEGES;"
+    echo 'users created'
 fi
-service mysql stop 
-sleep 5
+mysqladmin -uroot -p${MYSQL_ROOT_PASS} shutdown
 echo "Launching mysqld"
-mysqld_safe
+mysqld

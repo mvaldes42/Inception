@@ -2,5 +2,15 @@ curl localhost
 sudo systemctl stop nginx
 sudo systemctl disable nginx
 sudo service nginx stop; sudo service mysql stop
-mysqladmin -u root -p ping
-docker exec -it srcs_mariadb_1 /bin/bash
+
+make logs c=wordpress_container
+make logs c=mariadb_container
+
+docker exec -it mariadb_container /bin/bash
+
+// SHOW DATABASE IS NOT EMPTY
+mysql -u data_user -p
+SHOW DATABASES;
+USE data_name;
+SELECT * FROM wp_comments;
+SHOW TABLES FROM data_name;

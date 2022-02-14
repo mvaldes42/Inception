@@ -1,10 +1,13 @@
 COMPOSE_FILE= srcs/docker-compose.yml
 
-.PHONY: all services-stop hosts build up start down destroy stop restart ps clean
+DB_DATA_DIR= /home/mvaldes/data/db_data
+WP_DATA_DIR= /home/mvaldes/data/wordpress_data
 
-.SILENT: hosts
+.PHONY: all services-stop hosts build up start down destroy stop restart ps logs clean create-dirs remove-dirs
 
-all: hosts build up
+.SILENT: hosts create-dirs remove-dirs
+
+all: hosts create-dirs build up
 
 services-stop:
 		sudo systemctl stop nginx
@@ -37,16 +40,35 @@ restart: stop start
 ps:
 		docker-compose -f ${COMPOSE_FILE} ps
 logs:
-		docker logs -t $(c)
-clean:
-		sudo docker-compose -f srcs/docker-compose.yml down
-		sudo docker rmi -f $$(sudo docker images -qa)
-		sudo docker rm -f $$(sudo docker ps -qa)
-		sudo docker rm -f $$(sudo docker ps -ls)
-		sudo docker volume rm $$(sudo docker volume ls -q)
-		sudo docker system prune -a --volumes
-		sudo docker system prune -a --force
-		# docker stop $$(docker ps -qa); docker rm $$(docker ps -qa)
-		# docker rmi -f $$(docker images -qa)
-		# docker volume rm $$(docker volume ls -q)
-		# docker network rm $$(docker network ls -q) 2>/dev/null
+		docker logs -ft $(c)
+clean: down remove-dirs
+		echo "-- docker rmi -f $$(docker images -qa)"
+		docker rmi -f $$(docker images -qa)
+		echo "-- docker rm -f $$(docker ps -qa)"
+		docker rm -f $$(docker ps -qa)
+		echo "-- docker volume rm $$(docker volume ls -q)"
+		docker volume rm $$(docker volume ls -q)
+		echo "-- docker system prune -a --volumes"
+		docker system prune -a --volumes
+		echo "-- docker system prune -a --force"
+		docker system prune -a --force
+
+create-dirs:
+		if [ -d "${DB_DATA_DIR}" ] ; then \
+			echo "Directory ${DB_DATA_DIR} exists."; \
+		else \
+			sudo mkdir ${DB_DATA_DIR}; \
+			echo "Directory ${DB_DATA_DIR} created."; \
+		fi
+		if [ -d "${WP_DATA_DIR}" ] ; then \
+			echo "Directory ${WP_DATA_DIR} exists."; \
+		else \
+			sudo mkdir ${WP_DATA_DIR}; \
+			echo "Directory ${WP_DATA_DIR} created."; \
+		fi
+
+remove-dirs:
+	sudo rm -rf ${DB_DATA_DIR}
+	echo "Directory ${DB_DATA_DIR} removed."
+	sudo rm -rf ${WP_DATA_DIR}
+	echo "Directory ${WP_DATA_DIR} removed."

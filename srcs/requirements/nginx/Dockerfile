@@ -11,7 +11,6 @@ RUN mkdir /var/www/mvaldes.42.fr && \
 chown -R www-data /var/www/* && \
 chmod -R 755 /var/www/*
 
-# COPY index.html /var/www/mvaldes.42.fr
 COPY nginx.conf /etc/nginx/sites-available/mvaldes.42.fr
 RUN ln -s /etc/nginx/sites-available/mvaldes.42.fr /etc/nginx/sites-enabled && \
 rm /etc/nginx/sites-enabled/default
@@ -23,7 +22,5 @@ RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/
 
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
-EXPOSE 443 80
+EXPOSE 443
 CMD ["/usr/sbin/nginx"]
-
-# -------------------------END----------------------------------------#
