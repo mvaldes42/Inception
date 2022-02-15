@@ -1,7 +1,6 @@
 FROM debian:buster 
 
-RUN apt-get update && apt-get install -y mariadb-server sudo procps;
-RUN apt-get install -y systemd;
+RUN apt-get update && apt-get install -y mariadb-server;
 
 COPY tools/setup.sh . 
 RUN chmod +x setup.sh 

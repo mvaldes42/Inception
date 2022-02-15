@@ -21,7 +21,6 @@ services:
     build: requirements/wordpress
     depends_on:
       - mariadb
-        # condition: service_healthy
     env_file: .env
     ports:
       - "9000:9000"

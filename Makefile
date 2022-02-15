@@ -7,7 +7,7 @@ WP_DATA_DIR= /home/mvaldes/data/wordpress_data
 
 .SILENT: hosts create-dirs remove-dirs
 
-all: hosts create-dirs build up
+all: hosts create-dirs services-stop build up
 
 services-stop:
 		sudo systemctl stop nginx

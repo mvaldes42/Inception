@@ -1,14 +1,8 @@
-curl localhost
-sudo systemctl stop nginx
-sudo systemctl disable nginx
-sudo service nginx stop; sudo service mysql stop
-
 make logs c=wordpress_container
 make logs c=mariadb_container
 
 docker exec -it mariadb_container /bin/bash
 
-// SHOW DATABASE IS NOT EMPTY
 mysql -u data_user -p
 SHOW DATABASES;
 USE data_name;
